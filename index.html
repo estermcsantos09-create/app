@@ -1,6 +1,21 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/favicon.ico?v=2" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=2">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
+<meta name="theme-color" content="#FCF4DC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1F1810" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Organizador">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="description" content="Meu organizador pessoal: finanças, agenda, rotina, trabalho, diário e anotações.">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Meu Organizador</title>
-<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Caveat:wght@500;700&family=DM+Sans:wght@400;500;700&display=swap">
 <style>
 /* Layout: menu lateral + painel (desktop); barra inferior no celular. Tema: janela ao pôr do sol, creme manteiga, dourado e post-its. */
@@ -119,7 +134,7 @@ button.row{cursor:pointer}
 .mini{font-size:12px;padding:5px 9px;border-radius:8px;border:1px solid var(--ctl);background:var(--surface);color:var(--ink);cursor:pointer}
 .foot{margin:22px 0 0;font-size:12px;color:var(--muted)}
 .dia-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px}
-.topbar{display:flex;justify-content:flex-end;margin-bottom:6px}
+.topbar{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-bottom:6px}
 .themebtn{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:6px 12px;cursor:pointer}
 .themebtn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 /* post-its, frases e diário */
@@ -179,8 +194,12 @@ h3.mes{font-family:var(--f-display);font-size:15px;text-transform:capitalize;col
   .nav a{flex:1;flex-direction:column;gap:2px;font-size:11px;padding:6px 2px;justify-content:center;min-width:0}
 }
 @media (prefers-reduced-motion:no-preference){.btn,.chk,.dayb,.mini,.entry,.stk{transition:background .15s,border-color .15s,transform .15s}.stk:hover{transform:rotate(0) translateY(-2px)}}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(86px + env(safe-area-inset-bottom,0px));z-index:60;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;max-width:min(92vw,420px);text-align:center}
+@media (min-width:821px){.toast{bottom:24px}}
 </style>
 
+</head>
+<body>
 <div class="shell">
   <nav class="nav" aria-label="Seções">
     <div class="brand"><span class="mark"></span>Meu Organizador</div>
@@ -191,7 +210,7 @@ h3.mes{font-family:var(--f-display);font-size:15px;text-transform:capitalize;col
     <a href="#trabalho" data-tab="trabalho"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M3 13h18"/></svg><span>Trabalho</span></a>
     <a href="#diario" data-tab="diario"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg><span>Diário</span></a>
   </nav>
-  <main><div class="topbar"><button id="theme" class="themebtn" type="button"></button></div><div id="view"></div></main>
+  <main><div class="topbar"><button id="install" class="themebtn" type="button" hidden>Instalar no celular</button><button id="theme" class="themebtn" type="button"></button></div><div id="view"></div></main>
 </div>
 <div id="modal" hidden></div>
 
@@ -330,7 +349,7 @@ function footText(){
   if(status==='nuvem') return 'Salvo na sua conta, em uma área privada. Só você vê estes dados.';
   if(status==='lento') return 'A sua conta ainda não respondeu. O que você alterar fica neste navegador por enquanto.';
   if(status==='erro') return 'Não consegui salvar na sua conta agora. As alterações ficam neste navegador.';
-  if(status==='local') return 'Salvo apenas neste navegador.';
+  if(status==='local') return 'Salvo apenas neste aparelho. Guarde uma cópia de segurança de vez em quando.';
   return 'Conectando à sua conta…';
 }
 function setStatus(s){status=s; var f=$('#foot'); if(f) f.textContent=footText();}
@@ -606,7 +625,7 @@ function vDiario(){
 
 function render(){
   var views={hoje:vHoje,financas:vFin,agenda:vAgenda,rotina:vRotina,trabalho:vTrab,diario:vDiario};
-  $('#view').innerHTML=views[ui.tab]()+(ui.tab==='diario'&&ui.dsub==='inspira'?'':'<p class="foot" id="foot">'+footText()+'</p>');
+  $('#view').innerHTML=views[ui.tab]()+(ui.tab==='diario'&&ui.dsub==='inspira'?'':'<p class="foot" id="foot">'+footText()+'</p><p class="foot"><button class="linkbtn" data-act="backup">Salvar cópia dos dados</button> · <button class="linkbtn" data-act="restaurar">Restaurar cópia</button></p>');
   document.querySelectorAll('.nav a').forEach(function(a){
     if(a.dataset.tab===ui.tab) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');
   });
@@ -826,9 +845,59 @@ $('#theme').addEventListener('click',function(){
 });
 aplicaTema(temaSalvo());
 
+/* ---------- versão instalável: backup, instalar e offline ---------- */
+function aviso(txt){
+  var t=document.createElement('div'); t.className='toast'; t.setAttribute('role','status'); t.textContent=txt;
+  document.body.appendChild(t); setTimeout(function(){t.remove()},3500);
+}
+function backup(){
+  var blob=new Blob([JSON.stringify({app:'meu-organizador',versao:1,quando:new Date().toISOString(),dados:S},null,1)],{type:'application/json'});
+  var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='meu-organizador-'+today()+'.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function(){URL.revokeObjectURL(a.href)},2000);
+  aviso('Cópia salva. Guarde o arquivo em um lugar seguro.');
+}
+function restaurar(){
+  var inp=document.createElement('input'); inp.type='file'; inp.accept='application/json,.json';
+  inp.onchange=function(){
+    var f=inp.files&&inp.files[0]; if(!f) return;
+    f.text().then(function(t){
+      var d=null;
+      try{var j=JSON.parse(t); d=j.dados||j;}catch(e){}
+      if(!(d&&d.fin&&d.agenda&&d.rotina&&d.trabalho)){aviso('Esse arquivo não parece ser uma cópia do organizador.'); return;}
+      S=d; ensure(); saveLocal(); render(); aviso('Cópia restaurada.');
+    });
+  };
+  inp.click();
+}
+document.addEventListener('click',function(e){
+  var el=e.target.closest('[data-act]'); if(!el) return;
+  if(el.dataset.act==='backup') backup();
+  else if(el.dataset.act==='restaurar') restaurar();
+});
+var dp=null, instBtn=$('#install');
+function ajudaInstalar(){
+  var m=$('#modal'); m.hidden=false; m.setAttribute('data-act','close');
+  m.innerHTML='<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="mt"><h2 id="mt">Instalar no celular</h2>'+
+    '<p><b>iPhone:</b> abra este endereço no Safari, toque em Compartilhar (o quadrado com a seta) e depois em “Adicionar à Tela de Início”.</p>'+
+    '<p><b>Android:</b> abra o menu do navegador (os três pontinhos) e toque em “Instalar app” ou “Adicionar à tela inicial”.</p>'+
+    '<div class="form-actions"><button type="button" class="btn" data-act="close">Entendi</button></div></div>';
+}
+var jaInstalado=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault(); dp=e; if(!jaInstalado) instBtn.hidden=false;});
+window.addEventListener('appinstalled',function(){instBtn.hidden=true; dp=null;});
+if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!jaInstalado) instBtn.hidden=false;
+instBtn.addEventListener('click',function(){
+  if(dp){dp.prompt(); dp.userChoice.then(function(){dp=null; instBtn.hidden=true;});}
+  else ajudaInstalar();
+});
+try{if(navigator.storage&&navigator.storage.persist) navigator.storage.persist();}catch(e){}
+if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}
+
 route();
 connect();
 })();
 </script>
 
-</body></html>
+</body>
+</html>
